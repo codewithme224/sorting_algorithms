@@ -29,13 +29,13 @@ void quick_sort(int *array, size_t size)
 
 void quick_sort_helper(int *array, int low, int high, size_t size)
 {
-	int pivot;
+	int pivots;
 
 	if (low < high)
 	{
-		pivot = partition(array, low, high, size);
-		quick_sort_helper(array, low, pivot - 1, size);
-		quick_sort_helper(array, pivot + 1, high, size);
+		pivots = partition(array, low, high, size);
+		quick_sort_helper(array, low, pivots - 1, size);
+		quick_sort_helper(array, pivots + 1, high, size);
 	}
 }
 
