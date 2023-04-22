@@ -10,10 +10,10 @@
 
 void quick_sort(int *array, size_t size)
 {
-	if (array == NULL || size < 2)
+	if (!array || size < 2)
 		return;
 
-	quick_sort_helper(array, 0, size - 1, size);
+	quick_sort_helper(array, 0, (int)size - 1, size);
 }
 
 
@@ -62,23 +62,19 @@ int partition(int *array, int low, int high, size_t size)
 	{
 		if (array[j] < pivot)
 		{
-			if (i != j)
-			{
-				temp = array[j];
-				array[j] = array[i];
-				array[i] = temp;
+			temp = array[i];
+			array[i] = array[j];
+			array[j] = temp;
+
+			if (array[i] != array[j])
 				print_array(array, size);
-			}
 			i++;
 		}
 	}
+	temp = array[i];
+	array[i] = array[high];
+	array[high] = temp;
 	if (array[i] != array[high])
-	{
-		temp = array[i];
-		array[i] = array[high];
-		array[right] = temp;
 		print_array(array, size);
-	}
-
 	return (i);
 }
