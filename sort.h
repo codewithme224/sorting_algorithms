@@ -49,6 +49,8 @@ void bitonic_sort(int *array, size_t size);
 
 void radix_sort(int *array, size_t size);
 
+void count_sort(int *array, size_t size, int exp);
+
 void heap_sort(int *array, size_t size);
 
 void heapify(int *arr, size_t initialSize, size_t currentSize, size_t index);
