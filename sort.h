@@ -51,6 +51,8 @@ void radix_sort(int *array, size_t size);
 
 void heap_sort(int *array, size_t size);
 
+void heapify(int *array, size_t size, int i, int n);
+
 void merge_sort(int *array, size_t size);
 
 void merge(int *array, int *lo, int *hi, size_t size);
