@@ -44,27 +44,29 @@ void quick_sort_hoare_helper(int *array, int lo, int hi, size_t size)
 
 int partition_hoare(int *array, int lo, int hi, size_t size)
 {
-	int pivot, i, j, tmp;
+	int pivot, tmp;
 
 	pivot = array[hi];
-	i = lo - 1;
-	j = hi + 1;
 
-	while (1)
+	while (lo <= hi)
 	{
-		do {
-			i++;
-		} while (array[i] < pivot);
-
-		do {
-			j--;
-		} while (array[j] > pivot);
-
-		if (i > j)
-			return (j);
-		tmp = array[i];
-		array[i] = array[j];
-		array[j] = tmp;
-		print_array(array, size);
+		while (array[lo] < pivot)
+			lo++;
+		while (array[hi] > pivot)
+			hi--;
+		if (lo <= hi)
+		{
+			if (lo != hi)
+			{
+				tmp = array[lo];
+				array[lo] = array[hi];
+				array[hi] = tmp;
+				print_array(array, size);
+			}
+			lo++;
+			hi--;
+		}
 	}
+	return (hi);
+
 }
