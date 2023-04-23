@@ -44,6 +44,8 @@ int partition(int *array, int low, int high, size_t size);
 void shell_sort(int *array, size_t size);
 
 void quick_sort_hoare(int *array, size_t size);
+int partition_hoare(int *array, int lo, int hi, size_t size);
+void quick_sort_hoare_helper(int *array, int lo, int hi, size_t size);
 
 void bitonic_sort(int *array, size_t size);
 void swap_array(int *array, size_t index, size_t j, size_t dir);
