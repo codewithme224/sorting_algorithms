@@ -8,48 +8,64 @@
 
 void heap_sort(int *array, size_t size)
 {
-	int i, tmp;
+	size_t index, initialSize = size;
+	int temp;
 
-	if (!array || size < 2)
+	if (!array)
 		return;
-	for (i = size / 2 - 1; i >= 0; i--)
-		heapify(array, size, i, size);
-	for (i = size - 1; i >= 0; i--)
+
+	for (index = 0; index < size / 2 ; index++)
 	{
-		tmp = array[0];
-		array[0] = array[i];
-		array[i] = tmp;
-		print_array(array, size);
-		heapify(array, i, 0, size);
+		heapify(array, initialSize, size, size / 2 - 1 - index);
+	}
+	for (index = 0; index < initialSize - 1; index++)
+	{
+		temp = array[0];
+		array[0] = array[size - 1 - index];
+		array[size - 1 - index] = temp;
+		print_array(array, initialSize);
+		heapify(array, initialSize, size - index - 1, 0);
 	}
 }
 
 /**
  * heapify - heapifies a subtree
- * @array: array to sort
- * @size: size of array
- * @i: index of root node
- * @n: size of heap
+ * @arr: array to sort
+ * @currentSize: size of array
+ * @initialSize: original size of the array
+ * @index: index of root node
  */
 
-void heapify(int *array, size_t size, int i, int n)
+void heapify(int *arr, size_t initialSize, size_t currentSize, size_t index)
 {
-	int largest, left, right, tmp;
+	int current, left, right;
+	size_t leftIndex, rightIndex;
 
-	largest = i;
-	left = 2 * i + 1;
-	right = 2 * i + 2;
+	leftIndex = index * 2 + 1;
+	rightIndex = leftIndex + 1;
+	left = arr[leftIndex];
+	right = arr[rightIndex];
+	current = arr[index];
 
-	if (left < n && array[left] > array[largest])
-		largest = left;
-	if (right < n && array[right] > array[largest])
-		largest = right;
-	if (largest != i)
+	if (((leftIndex < currentSize) &&
+			(rightIndex < currentSize) &&
+			(left >= right && left > current)) ||
+			((leftIndex == currentSize - 1) &&
+			left > current))
 	{
-		tmp = array[i];
-		array[i] = array[largest];
-		array[largest] = tmp;
-		print_array(array, size);
-		heapify(array, size, largest, n);
+		arr[index] = left;
+		arr[leftIndex] = current;
+		print_array(arr, initialSize);
 	}
+	else if (leftIndex < currentSize && rightIndex < currentSize &&
+			(right > left && right > current))
+	{
+		arr[index] = right;
+		arr[rightIndex] = current;
+		print_array(arr, initialSize);
+	}
+	if (leftIndex < currentSize - 1)
+		heapify(arr, initialSize, currentSize, leftIndex);
+	if (rightIndex < currentSize - 1)
+		heapify(arr, initialSize, currentSize, rightIndex);
 }
