@@ -1,141 +1,102 @@
 #include "sort.h"
-
 /**
- * compare_swap_down - compares and swaps elements in the down direction
- * @init_array: the original array being sorted
- * @sub_array: array to sort
- * @init_size: the size of the original array
- * @size: size of array
- * @flag: flag to signal the end of the recursion
+ * swap_array - swaps elements of the array checking the position
+ * @array: Array with numbers to be sorted
+ * @index: position
+ * @j: position
+ * @dir: 1 if is ascending
  */
-void compare_swap_down(int *init_array, int *sub_array,
-		size_t init_size, size_t size, int *flag)
+void swap_array(int *array, size_t index, size_t j, size_t dir)
 {
-	int temp;
-	size_t i;
-	(void)init_array;
+	int temp = 0;
 
-	if (flag[0] == 0)
+	if (dir == (array[index] > array[j]))
 	{
-		for (i = 0; i < size / 2; i++)
+		temp = array[index];
+		array[index] = array[j];
+		array[j] = temp;
+	}
+}
+/**
+ * merge_array - swaps elements of the array
+ * @array: Array with numbers to be sorted
+ * @low: Starting point of the lower part of the array
+ * @size: size of the new partition
+ * @dir: 1 if is ascending
+ */
+void merge_array(int *array, size_t low, size_t size, size_t dir)
+{
+	size_t k = 0, i = 0;
+
+	if (size > 1)
+	{
+		k = size / 2;
+		i = low;
+		while (i < low + k)
+			swap_array(array, i, i + k, dir), i++;
+		merge_array(array, low, k, dir);
+		merge_array(array, low + k, k, dir);
+	}
+}
+/**
+ * sort_array - Sorts the array using recursion
+ * @array: Array with numbers to be sorted
+ * @low: Starting point of the lower part of the array
+ * @size: size of the new partition
+ * @dir: 1 if is ascending
+ * @length: size of the original array
+ */
+void sort_array(int *array, size_t low, size_t size, size_t dir, size_t length)
+{
+	size_t k = 0;
+	int *aux = NULL;
+
+	if (size > 1)
+	{
+		k = size / 2;
+		if (k > 1)
 		{
-			if (sub_array[0] < sub_array[size - 1])
-			{
-				temp = sub_array[0];
-				sub_array[0] = sub_array[size - 1];
-				sub_array[size - 1] = temp;
-				printf("Result [%lu/%lu] (DOWN):\n", size, init_size);
-				print_array(sub_array, size);
-			}
+			printf("Merging [%li/%li] (UP):\n", k, length);
+			aux = &array[low];
+			print_array(aux, k);
 		}
-	}
-}
-
-/**
- * compare_swap_up - compares and swaps elements in the up direction
- * @init_array: the original array being sorted
- * @sub_array: array to sort
- * @init_size: the size of the original array
- * @size: size of array
- * @flag: flag to signal the end of the recursion
- */
-
-void compare_swap_up(int *init_array, int *sub_array,
-		size_t init_size, size_t size, int *flag)
-{
-	int temp;
-	size_t i;
-	(void)init_array;
-
-	if (flag[0] == 0)
-	{
-		for (i = 0; i < size / 2; i++)
+		sort_array(array, low, k, 1, length);
+		if (k > 1)
 		{
-			if (sub_array[0] > sub_array[size - 1])
-			{
-				temp = sub_array[0];
-				sub_array[0] = sub_array[size - 1];
-				sub_array[size - 1] = temp;
-				printf("Result [%lu/%lu] (UP):\n", size, init_size);
-				print_array(sub_array, size);
-			}
+			printf("Result [%li/%li] (UP):\n", k, length);
+			print_array(aux, k);
+			printf("Merging [%li/%li] (DOWN):\n", k, length);
+			aux = &array[low + k];
+			print_array(aux, k);
 		}
+		sort_array(array, low + k, k, 0, length);
+		if (k > 1)
+		{
+			printf("Result [%li/%li] (DOWN):\n", k, length);
+			print_array(aux, k);
+		}
+		merge_array(array, low, size, dir);
 	}
 }
-
 /**
- * bitonic_deep_down - recursively calls the bitonic sort in the down direction
- * @init_array: the original array being sorted
- * @sub_array: array to sort
- * @init_size: the size of the original array
- * @size: size of array
- * @flag: flag to signal the end of the recursion
+ * bitonic_sort - Bitonic sort is a comparison-based sorting algorithm
+ * that can be run in parallel. It focuses on converting a random sequence
+ * of numbers into a bitonic sequence, one that monotonically increases, then
+ * decreases. Rotations of a bitonic sequence are also bitonic.
+ * @array: Array of data to be sorted
+ * @size: size of the original array
  */
-
-void bitonic_deep_down(int *init_array, int *sub_array,
-		size_t init_size, size_t size, int *flag)
-{
-	(void)sub_array;
-
-	if (size < 2)
-	{
-		flag[0] = 0;
-		return;
-	}
-	printf("Merging [%lu/%lu] (DOWN):\n", size, init_size);
-	print_array(init_array, size);
-	bitonic_deep_up(init_array, sub_array, init_size, size / 2, flag);
-	compare_swap_up(init_array, sub_array, init_size, size, flag);
-	bitonic_deep_down(init_array, sub_array +
-			(size / 2), init_size, size / 2, flag);
-	compare_swap_down(init_array, sub_array, init_size, size, flag);
-}
-
-/**
- * bitonic_deep_up - recursively calls the bitonic sort in the up direction
- * @init_array: the original array being sorted
- * @sub_array: array to sort
- * @init_size: the size of the original array
- * @size: size of array
- * @flag: flag to signal the end of the recursion
- */
-
-void bitonic_deep_up(int *init_array, int *sub_array,
-		size_t init_size, size_t size, int *flag)
-{
-	(void)sub_array;
-
-	if (size < 2)
-	{
-		flag[0] = 0;
-		return;
-	}
-	printf("Merging [%lu/%lu] (UP):\n", size, init_size);
-	print_array(init_array, size);
-	bitonic_deep_up(init_array, sub_array, init_size, size / 2, flag);
-	compare_swap_up(init_array, sub_array, init_size, size, flag);
-	bitonic_deep_down(init_array, sub_array +
-			(size / 2), init_size, size / 2, flag);
-	compare_swap_down(init_array, sub_array, init_size, size, flag);
-}
-
-/**
- * bitonic_sort - sorts an array of integers in
- * ascending order using the Bitonic sort algorithm
- * @array: array to sort
- * @size: size of array
- */
-
 void bitonic_sort(int *array, size_t size)
 {
-	size_t init_size = size;
-	int *init_array = array;
-	int *flag;
-	int aux = {0};
+	size_t i = 1;
 
-	flag = &aux;
-	if (array)
-	{
-		bitonic_deep_up(init_array, init_array, init_size, size, flag);
-	}
+	while (i < size)
+		i <<= 1;
+	if (size < 2 || (i ^ size) != 0)
+		return;
+	printf("Mergin [%li/%li] (UP):\n", size, size);
+	print_array(array, size);
+	sort_array(array, 0, size, 1, size);
+	printf("Result [%li/%li] (UP):\n", size, size);
+	print_array(array, size);
 }

@@ -46,10 +46,10 @@ void shell_sort(int *array, size_t size);
 void quick_sort_hoare(int *array, size_t size);
 
 void bitonic_sort(int *array, size_t size);
-void compare_swap_down(int *init_array, int *sub_array, size_t init_size, size_t size, int *flag);
-void compare_swap_up(int *init_array, int *sub_array, size_t init_size, size_t size, int *flag);
-void bitonic_deep_down(int *init_array, int *sub_array, size_t init_size, size_t size, int *flag);
-void bitonic_deep_up(int *init_array, int *sub_array, size_t init_size, size_t size, int *flag);
+void swap_array(int *array, size_t index, size_t j, size_t dir);
+void merge_array(int *array, size_t low, size_t size, size_t dir);
+void sort_array(int *array, size_t low, size_t size, size_t dir, size_t length);
+
 
 void radix_sort(int *array, size_t size);
 
