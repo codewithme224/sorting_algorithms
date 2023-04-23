@@ -94,7 +94,7 @@ void bitonic_sort(int *array, size_t size)
 		i <<= 1;
 	if (size < 2 || (i ^ size) != 0)
 		return;
-	printf("Mergin [%li/%li] (UP):\n", size, size);
+	printf("Merging [%li/%li] (UP):\n", size, size);
 	print_array(array, size);
 	sort_array(array, 0, size, 1, size);
 	printf("Result [%li/%li] (UP):\n", size, size);
