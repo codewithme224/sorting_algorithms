@@ -53,9 +53,8 @@ void heap_sort(int *array, size_t size);
 
 void merge_sort(int *array, size_t size);
 
-void merge_sort_helper(int *array, int lo, int hi, int *tmp);
+void merge(int *array, int *l, int *r, size_t size);
 
-void merge(int *array, int lo, int mid, int hi, int *tmp);
 
 void counting_sort(int *array, size_t size);
 

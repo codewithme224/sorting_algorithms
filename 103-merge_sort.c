@@ -8,36 +8,27 @@
 
 void merge_sort(int *array, size_t size)
 {
-	int *tmp;
+	size_t mid = 0, i;
+	int left[1000];
+	int right[1000];
 
-	if (!array || size < 2)
+	if (!array)
 		return;
-	tmp = malloc(sizeof(int) * size);
-	if (!tmp)
+
+	if (size < 2)
 		return;
-	merge_sort_helper(array, 0, size - 1, tmp);
-	free(tmp);
-}
 
-/**
- * merge_sort_helper - sorts an array of integers in ascending order
- * @array: array to sort
- * @lo: lowest index of partition to sort
- * @hi: highest index of partition to sort
- * @tmp: temp array to store sorted partition
- */
+	mid = size / 2;
 
-void merge_sort_helper(int *array, int lo, int hi, int *tmp)
-{
-	int mid;
+	for (i = 0; i < mid; i++)
+		left[i] = array[i];
 
-	if (lo < hi)
-	{
-		mid = (lo + hi) / 2;
-		merge_sort_helper(array, lo, mid, tmp);
-		merge_sort_helper(array, mid + 1, hi, tmp);
-		merge(array, lo, mid, hi, tmp);
-	}
+	for (i = mid; i < size; i++)
+		right[i - mid] = array[i];
+
+	merge_sort(left, mid);
+	merge_sort(right, size - mid);
+	merge(array, left, right, size);
 }
 
 /**
@@ -49,33 +40,32 @@ void merge_sort_helper(int *array, int lo, int hi, int *tmp)
  * @tmp: temp array to store sorted partition
  */
 
-void merge(int *array, int lo, int mid, int hi, int *tmp)
+void merge(int *array, int *l, int *r, size_t size)
 {
-	int i, j, k;
+	int i = 0, j = 0, k = 0;
+	int size_l, size_r;
 
-	printf("Merging...\n[left]: ");
-	print_array(array + lo, mid - lo + 1);
+	size_l = size / 2;
+	size_r = size - size_l;
+	printf("Merging...\n");
+	printf("[left]: ");
+	print_array(l, size_l);
 	printf("[right]: ");
-	print_array(array + mid + 1, hi - mid);
+	print_array(r, size_r);
 
-	i = lo;
-	j = mid + 1;
-	k = lo;
-
-	while (i <= mid && j <= hi)
+	while (i < size_l && j < size_r)
 	{
-		if (array[i] < array[j])
-			tmp[k++] = array[i++];
+		if (l[i] < r[j])
+			array[k++] = l[i++];
 		else
-			tmp[k++] = array[j++];
+			array[k++] = r[j++];
 	}
 
-	while (i <= hi)
-		tmp[k++] = array[i++];
-	while (j <= hi)
-		tmp[k++] = array[j++];
-	for (i = lo; i <= hi; i++)
-		array[i] = tmp[i];
+	while (i < size_l)
+		array[k++] = l[i++];
+
+	while (j < size_r)
+		array[k++] = r[j++];
 	printf("[Done]: ");
-	print_array(array + lo, hi - lo + 1);
+	print_array(array, size);
 }
