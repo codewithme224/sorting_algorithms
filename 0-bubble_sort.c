@@ -9,30 +9,32 @@
 
 void bubble_sort(int *array, size_t size)
 {
-	if (array == NULL || size < 2)
-	{
+	unsigned int index = 0, j = 0;
+
+	if (size <= 1)
 		return;
-	}
 
-	for (int i = 0; i < size - 1; i++)
-	{
-		bool swapped = false;
-
-		for (int j = 0; j < size - i - 1; j++)
-		{
-			if (array[j] > array[j + 1])
+	for (index = 0; index < (size - 1); index++)
+		for (j = 1; j < size; j++)
+			if (array[j - 1] > array[j])
 			{
-				int temp = array[j];
-
-				array[j] = array[j + 1];
-				array[j + 1] = temp;
-				swapped = true;
+				swap_integers(&array[j - 1], &array[j]);
 				print_array(array, size);
 			}
-		}
 
-		if (!swapped)
-			break;
-	}
+}
 
+/**
+ * swap_integers - swap two pointers to integer
+ *
+ * @a: first int pointer
+ * @b: second int pointer
+ */
+void swap_integers(int *a, int *b)
+{
+	int swap_integers;
+
+	swap_integers = *a;
+	*a = *b;
+	*b = swap_integers;
 }
