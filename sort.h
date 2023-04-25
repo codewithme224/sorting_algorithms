@@ -50,7 +50,8 @@ void quick_sort_hoare_helper(int *array, int lo, int hi, size_t size);
 void bitonic_sort(int *array, size_t size);
 void swap_array(int *array, size_t index, size_t j, size_t dir);
 void merge_array(int *array, size_t low, size_t size, size_t dir);
-void sort_array(int *array, size_t low, size_t size, size_t dir, size_t length);
+void sort_array(int *array, size_t low, size_t size,
+		size_t dir, size_t length);
 
 
 void radix_sort(int *array, size_t size);
