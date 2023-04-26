@@ -9,7 +9,7 @@
 
 void swap(deck_node_t **deck, deck_node_t *node1, deck_node_t *node2)
 {
-	deck_node_t *tmp;
+	deck_node_t *tmp = NULL;
 
 	if (node1->prev)
 		node1->prev->next = node2;
@@ -34,8 +34,8 @@ void swap(deck_node_t **deck, deck_node_t *node1, deck_node_t *node2)
 
 void sort_deck(deck_node_t **deck)
 {
-	deck_node_t *node1, *node2;
-	int i, j;
+	deck_node_t *node1 = NULL, *node2 = NULL;
+	int i = 0, j = 0;
 
 	if (!deck || !(*deck) || !(*deck)->next)
 		return;
@@ -52,10 +52,19 @@ void sort_deck(deck_node_t **deck)
 				i++;
 			while (node2->card->value[j] != '\0')
 				j++;
-			if (i > j || (i == j && node1->card->kind > node2->card->kind))
+			if (i == j)
+			{
+				if (node1->card->kind > node2->card->kind)
+					swap(deck, node1, node2);
+				else if (node1->card->kind == node2->card->kind)
+				{
+					if (strcmp(node1->card->value, node2->card->value) > 0)
+						swap(deck, node1, node2);
+				}
+			}
+			else if (i > j)
 				swap(deck, node1, node2);
-			else
-				node2 = node2->next;
+			node2 = node2->next;
 		}
 		node1 = node1->next;
 	}
